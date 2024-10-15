@@ -9,3 +9,6 @@ To locally run this project , you can go to your CLI and run the following comma
 `npm install`
 
 `npm run dev`
+
+### Report
+For report you can go through : https://docs.google.com/document/d/1x5K1GjZXVif6IjGw0H-37vm-nM9XZplzL06zaRtP2d4/edit?usp=sharing
