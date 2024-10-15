@@ -1,13 +1,33 @@
-// src/app/dashboard/page.tsx
-import React from 'react'
-import { withAuth } from '../../components/ProtectedRoute'
+'use client'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '../../lib/supabase'
 import DashboardLayout from '../../components/DashboardLayout'
 import CustomBarChart from '../../components/BarChart'
 import CustomPieChart from '../../components/PieChart'
 import RealTimeData from '../../components/RealTimeData'
-import DataInputForm from '@/components/DataInputForm'
+import DataInputForm from '../../components/DataInputForm'
 
-function Dashboard() {
+export default function Dashboard() {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.push('/login')
+      } else {
+        setIsLoading(false)
+      }
+    }
+    checkUser()
+  }, [router])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   // This data should come from your Supabase database in a real application
   const barChartData = [
     { name: 'Jan', value: 400 },
@@ -36,6 +56,7 @@ function Dashboard() {
           <CustomPieChart data={pieChartData} />
         </div>
         <div className="bg-white p-6 rounded-lg shadow md:col-span-2">
+          <h2 className="text-xl font-semibold mb-4">Real-time Data</h2>
           <RealTimeData />
         </div>
         <div className="bg-white p-6 rounded-lg shadow md:col-span-2">
@@ -46,5 +67,3 @@ function Dashboard() {
     </DashboardLayout>
   )
 }
-
-export default withAuth(Dashboard)

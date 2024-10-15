@@ -12,13 +12,12 @@ export default function RealTimeData() {
   const [data, setData] = useState<DataPoint[]>([])
 
   useEffect(() => {
-    // Fetch initial data
     fetchData()
 
     // Subscribe to real-time changes
     const subscription = supabase
       .channel('custom-all-channel')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'your_data_table' }, payload => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'dashboard_data' }, payload => {
         console.log('Change received!', payload)
         fetchData()
       })

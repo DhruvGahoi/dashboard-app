@@ -16,7 +16,6 @@ export default function DataInputForm() {
         body: JSON.stringify({ name, value: parseFloat(value) }),
       })
       if (!response.ok) throw new Error('Failed to submit data')
-      // Clear form or show success message
       setName('')
       setValue('')
       alert('Data submitted successfully!')
