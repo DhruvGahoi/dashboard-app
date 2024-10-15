@@ -2,20 +2,23 @@
 import React, { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw error
-      // Redirect to dashboard or show success message
-    } catch (error) {
-      console.error('Error logging in:', error)
-      // Show error message to user
+      router.push('/dashboard')
+    } catch (error: any) {
+      setError(error.message)
     }
   }
 
@@ -57,6 +60,10 @@ export default function Login() {
             />
           </div>
         </div>
+
+        {error && (
+          <div className="text-red-600 text-sm">{error}</div>
+        )}
 
         <div>
           <button

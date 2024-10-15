@@ -2,20 +2,22 @@
 import React, { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
       const { error } = await supabase.auth.signUp({ email, password })
       if (error) throw error
-      // Show success message or redirect
-    } catch (error) {
-      console.error('Error signing up:', error)
-      // Show error message to user
+      router.push('/dashboard')
+    } catch (error: any) {
+      setError(error.message)
     }
   }
 
@@ -57,6 +59,10 @@ export default function Signup() {
             />
           </div>
         </div>
+
+        {error && (
+          <div className="text-red-600 text-sm">{error}</div>
+        )}
 
         <div>
           <button
