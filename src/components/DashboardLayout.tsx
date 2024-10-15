@@ -25,12 +25,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   ]
 
-  // Convert chart data to CSV format
   const convertToCSV = (data: { label: string; value: number }[]) => {
     const header = ['Label', 'Value']
     const rows = data.map(row => [row.label, row.value])
 
-    // Create CSV content
     const csvContent = [header, ...rows]
       .map(row => row.join(','))
       .join('\n')
@@ -38,13 +36,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return csvContent
   }
 
-  // Trigger CSV download
   const downloadCSV = () => {
     const csv = convertToCSV(chartData)
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = window.URL.createObjectURL(blob)
 
-    // Create a hidden download link
     const a = document.createElement('a')
     a.href = url
     a.download = 'chart-data.csv'
@@ -53,7 +49,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     document.body.removeChild(a)
   }
 
-  // Apply dark mode to the HTML element
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark')
@@ -115,7 +110,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <Moon className="h-6 w-6 text-gray-500 dark:text-gray-300" />
                   )}
                 </button>
-                {/* CSV Download Button */}
                 <button onClick={downloadCSV} className="flex items-center text-gray-500 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-2 rounded-md">
                   <Download className="h-6 w-6 mr-2" />
                   Download CSV

@@ -28,7 +28,6 @@ export default function Dashboard() {
     return <div>Loading...</div>
   }
 
-  // This data should come from your Supabase database in a real application
   const barChartData = [
     { name: 'Jan', value: 400 },
     { name: 'Feb', value: 300 },

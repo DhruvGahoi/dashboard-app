@@ -26,7 +26,7 @@ export default function Login() {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw error
     } catch (error: unknown) {
-      if (error instanceof Error) {  // Ensure it's an Error instance
+      if (error instanceof Error) {
         setError(error.message);
       } else {
         setError("An unknown error occurred");

@@ -14,7 +14,6 @@ export default function RealTimeData() {
   useEffect(() => {
     fetchData()
 
-    // Subscribe to real-time changes
     const subscription = supabase
       .channel('custom-all-channel')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'dashboard_data' }, payload => {
