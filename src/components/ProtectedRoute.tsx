@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '../lib/supabase'
 
 export function withAuth(WrappedComponent: React.ComponentType) {
-  return function ProtectedRoute(props: any) {
+  return function ProtectedRoute(props: Record<string, unknown>) {
     const router = useRouter()
 
     useEffect(() => {
@@ -15,7 +15,7 @@ export function withAuth(WrappedComponent: React.ComponentType) {
         }
       }
       checkUser()
-    }, [])
+    }, [router])
 
     return <WrappedComponent {...props} />
   }

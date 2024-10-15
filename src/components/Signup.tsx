@@ -11,7 +11,7 @@ export default function Signup() {
   const router = useRouter()
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
         router.push('/dashboard')
       }
@@ -25,8 +25,12 @@ export default function Signup() {
     try {
       const { error } = await supabase.auth.signUp({ email, password })
       if (error) throw error
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {  // Ensure it's an Error instance
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
     }
   }
 
