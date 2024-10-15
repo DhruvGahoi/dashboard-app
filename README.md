@@ -10,5 +10,13 @@ To locally run this project , you can go to your CLI and run the following comma
 
 `npm run dev`
 
+## Demo Video 
+
+
+
+https://github.com/user-attachments/assets/e83f8c63-e453-4f7a-9f88-9e67334dffdd
+
+
+
 ### Report
 For report you can go through : https://docs.google.com/document/d/1x5K1GjZXVif6IjGw0H-37vm-nM9XZplzL06zaRtP2d4/edit?usp=sharing
