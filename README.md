@@ -10,11 +10,18 @@ To locally run this project , you can go to your CLI and run the following comma
 
 `npm run dev`
 
+
+## If you face some issue in sigin use 
+email : dummy@gmail.com
+
+pass : Dummy@123
+
 ## Demo Video 
 
 
 
 https://github.com/user-attachments/assets/e83f8c63-e453-4f7a-9f88-9e67334dffdd
+
 
 
 ## Assignment
