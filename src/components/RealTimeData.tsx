@@ -1,50 +1,66 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
-import CustomLineChart from './LineChart'
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase'; // Import Supabase client
+import CustomLineChart from './LineChart';
 
 type DataPoint = {
-  name: string
-  value: number
-}
+  name: string;
+  value: number;
+};
 
-export default function RealTimeData() {
-  const [data, setData] = useState<DataPoint[]>([])
+export default function LineChartContainer() {
+  const [chartData, setChartData] = useState<DataPoint[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('dashboard_data')
+        .select('name, value');
+      
+      if (error) {
+        console.error('Error fetching data:', error);
+        return;
+      }
+
+      console.log('Fetched Data:', data);
+      const formattedData = data?.map(item => ({
+        name: item.name,
+        value: item.value
+      }));
+
+      setChartData(formattedData || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetchData()
+    fetchData();
 
     const subscription = supabase
       .channel('custom-all-channel')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'dashboard_data' }, payload => {
-        console.log('Change received!', payload)
-        fetchData()
+        console.log('Change received!', payload);
+        fetchData();
       })
-      .subscribe()
+      .subscribe();
 
     return () => {
-      subscription.unsubscribe()
-    }
-  }, [])
-
-  const fetchData = async () => {
-    const { data, error } = await supabase
-      .from('your_data_table')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(10)
-
-    if (error) {
-      console.error('Error fetching data:', error)
-    } else {
-      setData(data.map(item => ({ name: item.name, value: item.value })))
-    }
-  }
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <div>
-      <h2>Real-time Data</h2>
-      <CustomLineChart data={data} />
+      {loading ? (
+        <p>Loading chart...</p>
+      ) : chartData.length > 0 ? (
+        <CustomLineChart data={chartData} />  // Pass chart data to the chart component
+      ) : (
+        <p>No data available</p>  // Display a message if no data is available
+      )}
     </div>
-  )
+  );
 }

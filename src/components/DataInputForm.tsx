@@ -1,5 +1,6 @@
 "use client"
 import React, { useState } from 'react'
+import { supabase } from '../lib/supabase'
 
 export default function DataInputForm() {
   const [name, setName] = useState('')
@@ -8,14 +9,11 @@ export default function DataInputForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await fetch('/api/data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, value: parseFloat(value) }),
-      })
-      if (!response.ok) throw new Error('Failed to submit data')
+      const { error } = await supabase
+        .from('dashboard_data')
+        .insert([{ name, value: parseFloat(value) }])
+
+      if (error) throw error
       setName('')
       setValue('')
       alert('Data submitted successfully!')
